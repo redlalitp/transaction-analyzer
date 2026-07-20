@@ -16,7 +16,10 @@ export default function TransactionsPage() {
     const { data, isLoading } = useTransactions(filters);
 
     const handleFiltersChange = useCallback((newFilters: TransactionFilters) => {
-        setFilters(newFilters);
+        setFilters((previous) => ({
+            ...previous,
+            ...newFilters,
+        }));
     }, []);
 
     return (

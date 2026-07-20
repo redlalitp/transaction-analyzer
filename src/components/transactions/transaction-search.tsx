@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 
 interface Props {
@@ -10,14 +10,29 @@ interface Props {
 
 export function TransactionSearch({ value, onChange }: Props) {
     const [search, setSearch] = useState(value ?? "");
+    const onChangeRef = useRef(onChange);
+    const lastCommittedValueRef = useRef(value ?? "");
+    const isInitialRenderRef = useRef(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            onChange(search);
+        onChangeRef.current = onChange;
+    }, [onChange]);
+
+    useEffect(() => {
+        if (isInitialRenderRef.current) {
+            isInitialRenderRef.current = false;
+            return;
+        }
+
+        const timer = window.setTimeout(() => {
+            if (search !== lastCommittedValueRef.current) {
+                onChangeRef.current(search);
+                lastCommittedValueRef.current = search;
+            }
         }, 500);
 
-        return () => clearTimeout(timer);
-    }, [search, onChange]);
+        return () => window.clearTimeout(timer);
+    }, [search]);
 
     return (
         <Input
