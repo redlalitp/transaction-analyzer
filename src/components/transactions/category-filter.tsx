@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
     Select,
     SelectContent,
@@ -9,85 +8,32 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-
 interface Props {
-
     value?: string;
-
     categories: string[];
-
     onChange: (value: string) => void;
-
 }
 
-
-
-export function CategoryFilter({
-
-    value,
-
-    categories,
-
-    onChange,
-
-}: Props) {
-
-
+export function CategoryFilter({ value, categories, onChange }: Props) {
     return (
-
         <Select
-
             value={value ?? "all"}
-
             onValueChange={(value) => {
-
-                onChange(
-                    value === "all"
-                        ? ""
-                        : value
-                );
-
+                onChange(value === "all" ? "" : value ?? "");
             }}
-
         >
-
-
-            <SelectTrigger className="w-[180px]">
-
+            <SelectTrigger className="h-11 w-[190px] rounded-xl border-border/70 bg-background/80 shadow-sm">
                 <SelectValue placeholder="Category" />
-
             </SelectTrigger>
 
-
             <SelectContent>
-
-
-                <SelectItem value="all">
-
-                    All Categories
-
-                </SelectItem>
-
-
-                {
-                    categories.map((category) => (
-
-                        <SelectItem
-                            key={category}
-                            value={category}
-                        >
-                            {category}
-                        </SelectItem>
-
-                    ))
-                }
-
-
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                        {category}
+                    </SelectItem>
+                ))}
             </SelectContent>
-
-
         </Select>
-
     );
-
 }
