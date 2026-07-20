@@ -21,8 +21,18 @@ export function createTransactionColumns(
                 />
             ),
 
-            cell: ({ row }) =>
-                new Date(row.original.transactionDate).toLocaleDateString(),
+            cell: ({ row }) => {
+                const dt = new Date(row.original.transactionDate);
+                const dateStr = dt.toLocaleDateString("en-GB");
+                const timeStr = dt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+                return (
+                    <div className="text-right">
+                        <div>{dateStr}</div>
+                        <div className="text-sm opacity-50">{timeStr}</div>
+                    </div>
+                );
+            },
         },
 
         {
