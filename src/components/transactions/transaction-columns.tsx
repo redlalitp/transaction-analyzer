@@ -46,7 +46,10 @@ export function createTransactionColumns(
             ),
 
             cell: ({ row }) => (
-                <Badge variant="secondary">
+                <Badge
+                    variant="secondary"
+                    className={getCategoryBadgeClass(row.original.category)}
+                >
                     {row.original.category}
                 </Badge>
             ),
@@ -117,4 +120,26 @@ function getTransactionType(transaction: Transaction): "DR" | "CR" | null {
     }
 
     return null;
+}
+
+function getCategoryBadgeClass(category?: string | null): string {
+    const normalized = category?.trim().toLowerCase() ?? "";
+
+    const palette = [
+        "bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800",
+        "bg-sky-100 text-sky-700 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800",
+        "bg-violet-100 text-violet-700 border-violet-200 dark:bg-violet-950/60 dark:text-violet-300 dark:border-violet-800",
+        "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800",
+        "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800",
+        "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950/60 dark:text-orange-300 dark:border-orange-800",
+        "bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800",
+        "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200 dark:bg-fuchsia-950/60 dark:text-fuchsia-300 dark:border-fuchsia-800",
+    ];
+
+    const hash = Array.from(normalized).reduce((acc, char) => {
+        acc = (acc * 31 + char.charCodeAt(0)) >>> 0;
+        return acc;
+    }, 0);
+
+    return palette[hash % palette.length];
 }
